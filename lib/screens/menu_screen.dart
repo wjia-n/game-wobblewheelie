@@ -1,3 +1,5 @@
+// DISTINCT ROLLOUT V2 — wobblewheelie: "Top-left grid"
+// Layout template from distinct-samples/laserlimbo.
 import 'package:flutter/material.dart';
 import '../theme/arcade_config.dart';
 import '../engine/arcade_engine.dart';
@@ -6,6 +8,8 @@ import '../services/sound_service.dart';
 import 'game_screen.dart';
 import 'settings_screen.dart';
 import 'support_screen.dart';
+
+const List<String> _emojiFb = ['Noto Color Emoji'];
 
 class MenuScreen extends StatefulWidget {
   final ArcadeConfig config;
@@ -51,61 +55,72 @@ class _MenuScreenState extends State<MenuScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(gradient: LinearGradient(
-          begin: Alignment.topCenter, end: Alignment.bottomCenter,
-          colors: [c.darkColor, c.primaryColor.withOpacity(0.6)])),
-        child: SafeArea(child: Center(child: SingleChildScrollView(
-          padding: const EdgeInsets.all(28),
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text(c.playerEmoji, style: const TextStyle(fontSize: 80)),
-            const SizedBox(height: 8),
-            Text(c.displayName.toUpperCase(), textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w900)),
-            const SizedBox(height: 4),
-            Text(c.tagline, textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white70, fontSize: 14)),
+          begin: Alignment.topLeft, end: Alignment.bottomRight,
+          colors: [c.darkColor, c.primaryColor.withOpacity(0.45)])),
+        child: SafeArea(child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(c.playerEmoji,
+                style: const TextStyle(fontSize: 48, fontFamilyFallback: _emojiFb)),
             const SizedBox(height: 12),
+            Text(c.displayName.toUpperCase(), textAlign: TextAlign.left,
+              style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w800, letterSpacing: 0.5, fontFamilyFallback: _emojiFb)),
+            const SizedBox(height: 6),
+            Text(c.tagline, textAlign: TextAlign.left,
+              style: const TextStyle(color: Colors.white70, fontSize: 14, fontFamilyFallback: _emojiFb)),
+            const SizedBox(height: 14),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(20)),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+              decoration: BoxDecoration(
+                color: Colors.white10,
+                border: Border(left: BorderSide(color: c.accentColor, width: 4)),
+              ),
               child: Text('🏆 $playerName — Best: $highScore',
-                  style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontFamilyFallback: _emojiFb)),
             ),
-            const SizedBox(height: 20),
-            _btn(context, '▶  PLAY', c.accentColor, Colors.black, _play),
-            _btn(context, '❓  HOW TO PLAY', Colors.white24, Colors.white,
-                () => _howTo(context, c)),
-            _btn(context, '⚙️  SETTINGS', Colors.white24, Colors.white, () {
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => SettingsScreen(config: c))).then((_) => _load());
-            }),
-            _btn(context, '💛  SUPPORT', Colors.amber.shade700, Colors.black, () {
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => SupportScreen(config: c)));
-            }),
-            const SizedBox(height: 24),
-            const Text('Credits: WAJIHA', style: TextStyle(color: Colors.white38, fontSize: 12)),
+            const SizedBox(height: 28),
+            Row(children: [
+              Expanded(child: _gridBtn('▶  PLAY', c.accentColor, Colors.black, _play)),
+              const SizedBox(width: 12),
+              Expanded(child: _gridBtn('❓  HOW TO PLAY', Colors.white12, Colors.white,
+                  () => _howTo(context, c))),
+            ]),
+            const SizedBox(height: 12),
+            Row(children: [
+              Expanded(child: _gridBtn('⚙️  SETTINGS', Colors.white12, Colors.white, () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (_) => SettingsScreen(config: c))).then((_) => _load());
+              })),
+              const SizedBox(width: 12),
+              Expanded(child: _gridBtn('💛  SUPPORT', Colors.white12, Colors.white, () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (_) => SupportScreen(config: c)));
+              })),
+            ]),
+            const SizedBox(height: 36),
+            const Text('Credits: WAJIHA', style: TextStyle(color: Colors.white38, fontSize: 12, fontFamilyFallback: _emojiFb)),
           ])))),
-      ),
-    );
+      );
   }
 
   void _howTo(BuildContext ctx, ArcadeConfig c) {
     showDialog(context: ctx, builder: (_) => AlertDialog(
       backgroundColor: c.darkColor,
-      title: Text(c.displayName, style: const TextStyle(color: Colors.white)),
-      content: Text(c.howTo, style: const TextStyle(color: Colors.white70)),
+      title: Text(c.displayName, style: const TextStyle(color: Colors.white, fontFamilyFallback: _emojiFb)),
+      content: Text(c.howTo, style: const TextStyle(color: Colors.white70, fontFamilyFallback: _emojiFb)),
       actions: [TextButton(
         onPressed: () => Navigator.pop(ctx),
-        child: Text('GOT IT', style: TextStyle(color: c.accentColor)))],
+        child: Text('GOT IT', style: TextStyle(color: c.accentColor, fontFamilyFallback: _emojiFb)))],
     ));
   }
 
-  Widget _btn(BuildContext ctx, String label, Color bg, Color fg, VoidCallback onTap) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 6),
-    child: SizedBox(width: double.infinity, child: ElevatedButton(
+  Widget _gridBtn(String label, Color bg, Color fg, VoidCallback onTap) =>
+    SizedBox(height: 118, child: ElevatedButton(
       style: ElevatedButton.styleFrom(backgroundColor: bg, foregroundColor: fg,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
-      onPressed: onTap, child: Text(label, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)))),
-  );
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        side: BorderSide(color: widget.config.accentColor.withOpacity(0.6), width: 1),
+        shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+      onPressed: onTap,
+      child: Text(label, textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamilyFallback: _emojiFb))));
 }
