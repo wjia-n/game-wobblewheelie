@@ -52,12 +52,12 @@ class _SupportScreenState extends State<SupportScreen> {
       backgroundColor: c.darkColor,
       appBar: AppBar(title: const Text('Support'), backgroundColor: c.primaryColor, foregroundColor: Colors.white),
       body: ListView(padding: const EdgeInsets.all(20), children: [
-        Center(child: Text(c.playerEmoji, style: const TextStyle(fontFamilyFallback: const ['Noto Color Emoji'], fontSize: 64))),
+        Align(alignment: Alignment.centerLeft, child: Text(c.playerEmoji, style: const TextStyle(fontFamilyFallback: const ['Noto Color Emoji'], fontSize: 64))),
         const SizedBox(height: 8),
-        const Center(child: Text('💛 EVERYTHING INCLUDED',
+        const Align(alignment: Alignment.centerLeft, child: Text('💛 EVERYTHING INCLUDED',
             style: TextStyle(fontFamilyFallback: const ['Noto Color Emoji'], color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold))),
         const SizedBox(height: 8),
-        const Center(child: Text(
+        const Align(alignment: Alignment.centerLeft, child: Text(
           'Every theme, shape and feature is already in the game.\nTips are purely optional — they just make our day!',
           textAlign: TextAlign.center, style: TextStyle(fontFamilyFallback: const ['Noto Color Emoji'], color: Colors.white70))),
         const SizedBox(height: 20),
@@ -87,7 +87,7 @@ class _SupportScreenState extends State<SupportScreen> {
           child: const Text('Rate us ⭐', style: TextStyle(fontFamilyFallback: const ['Noto Color Emoji'], color: Colors.white70)),
         ),
         const SizedBox(height: 12),
-        const Center(child: Text('Credits: WAJIHA', style: TextStyle(fontFamilyFallback: const ['Noto Color Emoji'], color: Colors.white38, fontSize: 12))),
+        const Align(alignment: Alignment.centerLeft, child: Text('Credits: WAJIHA', style: TextStyle(fontFamilyFallback: const ['Noto Color Emoji'], color: Colors.white38, fontSize: 12))),
       ]),
     );
   }
@@ -96,6 +96,7 @@ class _SupportScreenState extends State<SupportScreen> {
     width: double.infinity,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(backgroundColor: bg, foregroundColor: Colors.white,
+          elevation: 6, shadowColor: Colors.black54,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
       onPressed: () => _tip(productId, label),
